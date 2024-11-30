@@ -1,23 +1,15 @@
 const express = require("express");
 const app = express();
 
-// Understanding dynamic routing 
-
-// 1st pattern
-app.get("/profile/:username", (req, res) => {
-    res.send(req.params.username + "s Page");
-})
-
-// 2nd pattern
-app.get("/author/:username/:age", (req, res) => {
-    res.send(`something about ${req.params.username} of ${req.params.age}`);
-});
-
-
+app.set("view engine", "ejs");
 
 app.get("/", (req, res) =>{
-    res.send("<h1>This is HOME Page.</h1>");
+    res.render("index");
 });
+
+app.get("/profile", (req, res) => {
+    res.render("profile");
+})
 
 // If no route not found then this code will work
 app.get("*", (req, res) => {
