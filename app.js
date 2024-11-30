@@ -1,18 +1,23 @@
 const express = require("express");
 const app = express();
-const morgan = require("morgan");
 
-// Morgan -> If you want info about client browser, machine, it will give you that on server.
-app.use(morgan("dev"));
-  
-//OR
+// Understanding dynamic routing 
 
-app.use(morgan("combined"));
+// 1st pattern
+app.get("/profile/:username", (req, res) => {
+    res.send(req.params.username + "s Page");
+})
+
+// 2nd pattern
+app.get("/author/:username/:age", (req, res) => {
+    res.send(`something about ${req.params.username} of ${req.params.age}`);
+});
+
+
 
 app.get("/", (req, res) =>{
     res.send("<h1>This is HOME Page.</h1>");
 });
-
 
 // If no route not found then this code will work
 app.get("*", (req, res) => {
