@@ -1,24 +1,20 @@
 const express = require("express");
 const app = express();
 
-app.set("view engine", "ejs");
+// always create server response in try or catch block. It's a good practice.
+app.get("/", (req, res, next) => {
+    try{
+        res.send(hey);
+    }
+    catch (err){
+        next(err);
+    }
+})
 
-// This code allows you to access the data entered by user in your console. 
-app.use(express.json());
-app.use(express.urlencoded({ extended: true })); 
-
-app.get("/", (req, res) =>{
-    res.render("index");
-});
-
-app.get("/register", (req, res) => {
-
-    // If method -> GET -> req.query 
-    // If method -> POST -> req.body
-
-    console.log(req.query);
-    res.send("User Registered.");
-});
+// Basic Error Handler in Express server
+app.use((err, req, res, next) => {
+    res.status(500).send(err.message);
+})
 
 
 // If no route not found then this code will work
