@@ -3,21 +3,15 @@ const app = express();
 const expressSession = require("express-session");
 const flash = require("connect-flash");
 const cors = require("cors");
+const cookieParser = require("cookie-parser");
 
+// cookie-parser -> used for reading cookie data on server from clients browser
 
-// CORS -> If you enable cors your all routes can be accessable on any other server.
-// This line of code will share all your servers routes 
-app.use(cors());
-
-// OR
-
-// You can decide which route you want to share
-app.get("/share", cors(), (req, res) => {
-    res.send("Share Page.");
-})
+app.use(cookieParser())
 
 // Setting up middlewares here
 
+app.use(cors());
 app.use(flash());
 app.use( expressSession({
     secret: "randdom stuffs", 
@@ -39,12 +33,34 @@ app.use("/create", (req, res, next) => {
 app.get("/message", (req, res, next) => {
     req.flash("error", "This is an error message");
     res.redirect("/error");
-})
+});
 
 app.get("/error", (req, res, next) => {
     let message = req.flash("error");
     res.send(message);
-} )
+});
+
+
+// Storing data in a cookie
+app.get("/bann", (req, res, next) => {
+    res.cookie("banned", "true");
+    res.send("banned");
+})
+
+// Reding stored data in a cookie
+app.get("/check", (req, res) => {
+    console.log(req.cookies.banned);
+    res.send("checking");
+
+});
+
+
+
+
+// If no route not found then this code will work
+app.get("*", (req, res) => {
+    res.send("<h1>Page Not 404!</h1>");
+});
 
 app.listen(3000, ()=>{
     console.log("Server is running on port 3000");
