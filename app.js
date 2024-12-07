@@ -12,15 +12,72 @@ const usersdata = require("./userdata");
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+
+// Advance mongodb commands
+
 //insert many 
 app.get("/insertmany", async (req, res, next) => {
   const insertedData =  await userModel.insertMany(usersdata);
    res.send(insertedData);
 })
 
+// eq operator 
+// $ means you are using mongoose operator
+app.get("/equal", async(req, res, next) => {
+    const equal = await userModel.find({age: {$eq: 25}});
+    res.send(equal);
+})
+
+// $ne (not equal) operator
+app.get("/notequal", async (req, res, next) => {
+    const notEqual = await userModel.find({age: {$ne: 25}});
+    res.send(notEqual);
+})
+
+// $lt (less than) operator
+app.get("/lessthan", async (req, res, next) => {
+    const lessThan = await userModel.find({age: {$lt: 25}});
+    res.send(lessThan);
+})
+
+// $lte (less than, and equal to ) operator
+app.get("/lessthanequal", async (req, res, next) => {
+    const lessThanEqual = await userModel.find({age: {$lte: 25}});
+    res.send(lessThanEqual);
+})
+
+// $gt (greater than) operator
+app.get("/greaterthan", async (req, res, next) => {
+    const greaterThan = await userModel.find({age: {$gt: 25}});
+    res.send(greaterThan);
+})
+
+// $gte (greater than equal) operator
+app.get("/greaterthanequal", async (req, res, next) => {
+    const greaterThanEqual = await userModel.find({age: {$gte: 25}});
+    res.send(greaterThanEqual);
+})
+
+// $in operator
+app.get("/in", async (req, res, next) => {
+    const indata = await userModel.find({age: {$in: [25,27,28,30]}});
+    res.send(indata);
+})
+
+// $nin (not in) operator
+app.get("/nin", async (req, res, next) => {
+    const nindata = await userModel.find({age: {$nin: [25,27,28,30]}});
+    res.send(nindata);
+})
+
+// $exits operator
+app.get("/existadmin", async (req, res, next) => {
+    const adminExists = await userModel.find( {isAdmin: {$exists: true}});
+    res.send(adminExists);
+})
 
 // Creating User
-app.post("/create", async (req, res, next) => {
+app.post("/create", async (req, res, next) => { 
 
     const { username, name, email, password } = req.body;
 
