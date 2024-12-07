@@ -4,9 +4,11 @@ const express = require("express");
 const app = express();
 const mongooseConnection = require("./config/mongoose");
 const userModel = require("./models/user");
+const user = require("./models/user");
 const debuglog = require("debug")("development:app");
 // const mongoose = require("mongoose");
 
+// Creating User
 app.get("/create", async (req, res, next) => {
     const createdUser = await userModel.create({
         username:"Harish",
@@ -20,16 +22,28 @@ app.get("/create", async (req, res, next) => {
     res.send("User Created");
 })
 
+// Reading User
 app.get("/read", async(req, res, next) => {
     const users = await userModel.find();
     debuglog("User Read");
     res.send(users);
 })
 
+// Updating User
 app.get("/update", async (req, res, next) => {
     const user = await userModel.findOneAndUpdate({name:"Harish"}, {name:"gopal"}, {new:true});
     res.send(user);
 })
+
+// Deleting user
+app.get("/delete", async(req, res, next) => {
+    const user = await userModel.findOneAndDelete({name:"gopal"});
+    console.log(user);
+    res.send("User Deleted.");
+})
+
+
+// Home Route
 app.get("/", (req, res, next) => {
     res.send("<h1>This is Home Page.</h1>");
 })
