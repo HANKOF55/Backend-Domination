@@ -1,4 +1,4 @@
-require("dotenv").config;
+require("dotenv").config();
 
 const express = require("express");
 const app = express();
@@ -26,6 +26,10 @@ app.get("/read", async(req, res, next) => {
     res.send(users);
 })
 
+app.get("/update", async (req, res, next) => {
+    const user = await userModel.findOneAndUpdate({name:"Harish"}, {name:"gopal"}, {new:true});
+    res.send(user);
+})
 app.get("/", (req, res, next) => {
     res.send("<h1>This is Home Page.</h1>");
 })
