@@ -6,15 +6,20 @@ const mongooseConnection = require("./config/mongoose");
 const userModel = require("./models/user");
 const user = require("./models/user");
 const debuglog = require("debug")("development:app");
-// const mongoose = require("mongoose");
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 // Creating User
-app.get("/create", async (req, res, next) => {
+app.post("/create", async (req, res, next) => {
+
+    const { username, name, email, password } = req.body;
+
     const createdUser = await userModel.create({
-        username:"Harish",
-        name:"Harish",
-        email:"harish@gmail.com",
-        password: "pass"
+        username: username,
+        name: name,
+        email: email,
+        password: password
     })
 
     debuglog("User Created");
@@ -23,21 +28,28 @@ app.get("/create", async (req, res, next) => {
 })
 
 // Reading User
-app.get("/read", async(req, res, next) => {
-    const users = await userModel.find();
+app.get("/read/:username", async(req, res, next) => {
+    const users = await userModel.findOne({username: req.params.username});
+    
     debuglog("User Read");
     res.send(users);
 })
 
 // Updating User
-app.get("/update", async (req, res, next) => {
-    const user = await userModel.findOneAndUpdate({name:"Harish"}, {name:"gopal"}, {new:true});
-    res.send(user);
+app.post("/update/:username", async (req, res, next) => {
+    const { newName, newUsername, newemail, newPass } = req.body; 
+    const Updateduser = await userModel.findOneAndUpdate({username:req.params.username}, {
+        username: newUsername,
+        name: newName,
+        email: newemail,
+        password: newPass
+    }, {new: true});
+    res.send(Updateduser);
 })
 
 // Deleting user
-app.get("/delete", async(req, res, next) => {
-    const user = await userModel.findOneAndDelete({name:"gopal"});
+app.get("/delete/:username", async(req, res, next) => {
+    const user = await userModel.findOneAndDelete({name:req.params.username});
     console.log(user);
     res.send("User Deleted.");
 })
