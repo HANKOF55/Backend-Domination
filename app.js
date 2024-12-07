@@ -1,21 +1,18 @@
+require("dotenv").config;
+
 const express = require("express");
 const app = express();
 
-// always create server response in try or catch block. It's a good practice.
+const mongoose = require("mongoose");
+
+// connecting to mongodb cluster
+mongoose.connect(`mongodb+srv://UserTesting:ifcHC0EI3UiJUAaS@cluster0.rzurd.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`)
+.then(() => {
+    console.log("connected to database");
+});
+
 app.get("/", (req, res, next) => {
-    try{
-        res.send(hey);
-    }
-    catch (err){
-        next(err);
-    }
 })
-
-// Basic Error Handler in Express server
-app.use((err, req, res, next) => {
-    res.status(500).send(err.message);
-})
-
 
 // If no route not found then this code will work
 app.get("*", (req, res) => {
