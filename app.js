@@ -5,10 +5,19 @@ const app = express();
 const mongooseConnection = require("./config/mongoose");
 const userModel = require("./models/user");
 const user = require("./models/user");
+const { model } = require("mongoose");
 const debuglog = require("debug")("development:app");
+const usersdata = require("./userdata");
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+//insert many 
+app.get("/insertmany", async (req, res, next) => {
+  const insertedData =  await userModel.insertMany(usersdata);
+   res.send(insertedData);
+})
+
 
 // Creating User
 app.post("/create", async (req, res, next) => {

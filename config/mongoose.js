@@ -11,7 +11,7 @@ const mongoose = require("mongoose");
 
 
 //connecting to local mongo db 
-mongoose.connect("mongodb://localhost:27017/testingdb")
+mongoose.connect("mongodb://localhost:27017/testingadbcommands")
 .then(() => {
     console.log("database connected...");
 })
